@@ -8,7 +8,7 @@
         <div class="alert alert-dismissible alert-light position-absolute top-50 start-50 translate-middle" style="opacity: 0.6; width: 350px; height:70px">
         </div>
         <h2 class="text-center text-dark position-absolute top-50 start-50 translate-middle">Partage tes figures !</h2>
-        <img src="images/img_home.jpg" class="img-fluid" alt="Image d'accueil" />
+        <img src="../images/img_home.jpg" class="img-fluid" alt="Image d'accueil" />
         <div class="row position-absolute bottom-0 end-0 pe-2 p-0 m-0">
             <div class="col">
                 <a href="#tricks" >
@@ -27,12 +27,12 @@
             <div class="col">
                 <div class="card p-2 mb-3">
                     {% if trick.images|length > 0 %}
-                        <img src="{{trick.images[0].path}}" class="card-img-top" alt="Thumbnail image">
+                        <img src="{{trick.images[0].path}}" class="card-img-top rounded-1" alt="Thumbnail image">
                     {% else %}
-                        <img src="https://picsum.photos/seed/picsum/200" class="card-img-top" alt="Placeholder img" width="254" height="150">
+                        <img src="https://unsplash.com/photos/xSNaPoQ0H9M/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NHx8bW91bnRhaW4lMjBzbm93Ym9hcmR8ZW58MHx8fHwxNjU5NjMxNTQz&force=true" class="card-img-top rounded-1" alt="Default image">
                     {% endif %}
                     <div class="card-body">
-                        <a href="#" class="nav-link"><h4 class="card-title text-center">{{ trick.name }}</h4></a>
+                        <a href="{{ path('trick', {'id': trick.id}) }}" class="nav-link"><h4 class="card-title text-center">{{ trick.name }}</h4></a>
                     </div>
                 </div>
             </div>

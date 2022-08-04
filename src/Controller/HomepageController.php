@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomepageController extends AbstractController
 {
-    #[Route('/', name: 'app_homepage')]
+    #[Route('/', name: 'homepage')]
     public function index(TrickRepository $repository): Response
     {
         $trick = $repository->findAll(Trick::class);
