@@ -7,12 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity('username', message: 'Ce nom d\'utilisateur est déjà utilisé.')]
 #[UniqueEntity('email', message: 'Cet email est déjà associé à un compte.')]
-class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -46,6 +48,9 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
 
     #[ORM\Column]
     private ?bool $isActive = false;
+
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
     #[ORM\OneToMany(mappedBy: 'iduser', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
@@ -112,6 +117,22 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
         return $this;
     }
 
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+
     /**
      * @return Collection<int, Comment>
      */
@@ -170,5 +191,21 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
     }
 }
