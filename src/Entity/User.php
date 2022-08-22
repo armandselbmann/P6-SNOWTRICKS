@@ -45,7 +45,7 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
     private ?string $email = null;
 
     #[ORM\Column]
-    private ?bool $isActive = null;
+    private ?bool $isActive = false;
 
     #[ORM\OneToMany(mappedBy: 'iduser', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
