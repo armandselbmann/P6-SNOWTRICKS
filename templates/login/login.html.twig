@@ -7,32 +7,43 @@
     <div class="container vh-85">
         <div class="row justify-content-center">
             <div class="col-6">
+
                 <h1 class="mt-3 mb-5 text-center">Connexion</h1>
 
-                <form action="{{ path('login') }}" method="post" class="card p-3">
-                    {% if error %}
-                    <div class="mb-3 d-grid col-6 mx-auto text-center">
-                        <div class="alert alert-danger text-center" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <div class="alert alert-danger alert-dismissible text-center mb-3" role="alert">
+                        Vous êtes déjà connecté(e) : {{ app.user.username }}
                     </div>
-                    {% endif %}
+                {% else %}
 
-                    <div class="mb-3 d-grid col-6 mx-auto text-center">
-                        <label for="username">Nom d'utilisateur :</label>
-                        <input type="text" id="username" name="_username" value="{{ last_username }}"/>
-                    </div>
-                    <div class="mb-3 d-grid col-6 mx-auto text-center">
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="_password"/>
-                    </div>
-                    <div class="mb-3 d-grid col-6 mx-auto text-center">
-                        <a href="#">Mot de passe oublié ?</a>
-                    </div>
-                    <input type="hidden" name="_target_path" value="{{ path('homepage') }}"/>
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                    <div class="d-grid col-6 mx-auto">
-                        <button type="submit" class="btn btn-primary">Se connecter</button>
-                    </div>
-                </form>
+                    <form action="{{ path('login') }}" method="post" class="card p-3">
+
+                        {% if error %}
+                            <div class="mb-3 d-grid col-6 mx-auto text-center">
+                                <div class="alert alert-danger text-center" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3 d-grid col-6 mx-auto text-center">
+                            <label for="username">Nom d'utilisateur :</label>
+                            <input type="text" id="username" name="_username" value="{{ last_username }}"/>
+                        </div>
+                        <div class="mb-3 d-grid col-6 mx-auto text-center">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="_password"/>
+                        </div>
+                        <div class="mb-3 d-grid col-6 mx-auto text-center">
+                            <a href="#">Mot de passe oublié ?</a>
+                        </div>
+                        <input type="hidden" name="_target_path" value="{{ path('homepage') }}"/>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        <div class="d-grid col-6 mx-auto">
+                            <button type="submit" class="btn btn-primary">Se connecter</button>
+                        </div>
+                    </form>
+
+                {% endif %}
+
             </div>
         </div>
     </div>
