@@ -20,8 +20,7 @@ class MailerService
             $to,
             $subject,
             $template,
-            $name,
-            $token
+            $context
     ): void
     {
         $email = (new TemplatedEmail())
@@ -29,12 +28,7 @@ class MailerService
             ->to($to)
             ->subject($subject)
             ->htmlTemplate("emails/$template.html.twig")
-            ->context([
-                //'expiration_date' => new \DateTime('+1 day'),
-                'username' => $name,
-                'usermail' => $to,
-                'token' => $token
-            ]);
+            ->context($context);
 
         $this->mailer->send($email);
     }

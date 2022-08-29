@@ -49,6 +49,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isActive = false;
 
+    #[ORM\Column(length: 100)]
+    private ?string $resetToken;
+
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
@@ -113,6 +116,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(string $resetToken) : self
+    {
+        $this->resetToken = $resetToken;
 
         return $this;
     }

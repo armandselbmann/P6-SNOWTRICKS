@@ -66,13 +66,15 @@ class RegistrationController extends AbstractController
             // Génération du token / Token generation
             $token = $jwt->generate($header, $payload, $this->getParameter('jwt_secret'), '3600');
 
+            // Création des données du mail / Create email data
+            $context = compact('token', 'user');
+
             // Envoie du mail / Send mail
             $mailer->sendEmail(
                 $user->getEmail(),
                 self::SUBJECT_MAIL,
                 self::TEMPLATE_MAIL,
-                $user->getUsername(),
-                $token
+                $context
             );
 
             $this->addFlash(
