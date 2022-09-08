@@ -7,59 +7,66 @@
     <div class="container">
         <div class="card p-2 mt-3 mb-3">
 
-            <!-- TRICK SPACE ------------------------>
-
-            <!-- Trick name & photo ------------------------>
+            <!-- Trick name & featured image ------------------------>
             <div class="container-fluid p-0 position-relative">
-                <div class="alert alert-dismissible alert-light position-absolute top-50 start-50 translate-middle" style="opacity: 0.6; width: 350px; height:70px">
-                </div>
-
+                <div class="alert alert-dismissible alert-light position-absolute top-50 start-50 translate-middle" style="opacity: 0.6; width: 350px; height:70px"></div>
                 <h2 class="text-center text-dark position-absolute top-50 start-50 translate-middle">{{ trick.name }}</h2>
 
-                {% if trick.images|length > 0 %}
-                    <img src="{{trick.images[0].path}}" class="card-img-top rounded-2" alt="{{trick.images[0].name}}">
+                <!-- Recherche d'une image mise en avant / Search featured image -->
+                {% set featuredImage = "" %}
+                {% for image in trick.images %}
+                    {% if image.featuredImage %}
+                        {% set featuredImage = image.name %}
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Si oui on l'affiche sinon on affiche une image par défaut / If yes we display it otherwise we display a default image -->
+                {% if featuredImage is not empty %}
+                    <img src="{{ asset('/uploads/' ~ featuredImage) }}" alt="Image" class="card-img-top rounded-2">
                 {% else %}
                     <img src="https://unsplash.com/photos/xSNaPoQ0H9M/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NHx8bW91bnRhaW4lMjBzbm93Ym9hcmR8ZW58MHx8fHwxNjU5NjMxNTQz&force=true" class="card-img-top" alt="Default image">
                 {% endif %}
             </div>
-            <!-- Photos ------------------------>
+
+            <!-- Images ------------------------>
             <div class="d-flex flex-wrap justify-content-center">
-                {% if trick.images is not empty %}
-                    <!--Set total videos -1 on a variable > because the array start at 0 -->
-                    {% set totimage = trick.images | length - 1 %}
-                    <!-- For number between 0 and the total videos -->
-                    {% for number in 0..totimage %}
-                        <img src="{{trick.images[number].path}}" class="w-25 p-3" alt="{{ trick.images[number].name}}">
-                    {% endfor %}
-                {% endif %}
+                {% for image in trick.images %}
+                        <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" class="w-25 p-3">
+                {% endfor %}
             </div>
+
             <!-- Videos ------------------------>
             <div class="d-flex flex-wrap justify-content-center">
-                    {% if trick.videos is not empty %}
-                        <!--Set total videos -1 on a variable > because the array start at 0 -->
-                        {% set totvideos = trick.videos | length - 1 %}
-                        <!-- For number between 0 and the total videos -->
-                        {% for nb in 0..totvideos %}
+                {% if trick.videos is not empty %}
+                    {% for video in trick.videos %}
+                        {% if video.link is empty %}
+                            <div class="d-flex justify-content-center align-items-center border border-warning p-2 m-2">
+                                Video -> Erreur d'affichage
+                            </div>
+                        {%  else %}
                             <div class="medias d-flex justify-content-center m-2">
                                 <iframe
                                         width="380"
                                         height="230"
-                                        src="{{trick.videos[nb].link}}"
+                                        src="{{video.link}}"
                                         title="Video Player"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowfullscreen
                                 >
                                 </iframe>
                             </div>
-                        {% endfor %}
-                    {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             </div>
             <hr>
+
             <!-- Trick description ------------------------>
             <div class="col-10 align-self-center">
-                <p class="p-2">{{ trick.description }}</p>
+                <p class="p-2">{{ trick.description | nl2br }}</p>
             </div>
             <hr>
+
             <!-- Name and category ------------------------>
             <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -78,7 +85,6 @@
             <hr>
 
             <!-- COMMENT SPACE ------------------------>
-
             <h2 class="text-center">Commentaires</h2>
 
         </div>
