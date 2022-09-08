@@ -1,22 +1,21 @@
 {% extends 'base.html.twig' %}
 {% form_theme formRegistration 'bootstrap_5_layout.html.twig' %}
+
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-
 
 <!-- Registration form -->
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-6">
             <h1 class="mt-3 mb-5 text-center">Inscrivez-vous</h1>
-            {{ form_start(formRegistration)
-            }}
+            {{ form_start(formRegistration) }}
                 <div class="mb-3 d-grid col-6 mx-auto text-center">
                     {{ form_label(formRegistration.username, 'Nom de l\'utilisateur') }}
                     {{ form_errors(formRegistration.username) }}
                     {{ form_widget(formRegistration.username) }}
-            </div>
+                </div>
                 <div class="mb-3 d-grid col-6 mx-auto text-center">
                     {{ form_label(formRegistration.email, 'Email') }}
                     {{ form_errors(formRegistration.email) }}
@@ -27,9 +26,9 @@
                     {{ form_errors(formRegistration.password) }}
                     {{ form_widget(formRegistration.password) }}
                 </div>
-            <div class="d-grid col-6 mx-auto">
-                <button type="submit" class="btn btn-primary">Créer un compte</button>
-            </div>
+                <div class="d-grid col-6 mx-auto">
+                    <button type="submit" class="btn btn-primary">Créer un compte</button>
+                </div>
             {{ form_end(formRegistration) }}
         </div>
     </div>
