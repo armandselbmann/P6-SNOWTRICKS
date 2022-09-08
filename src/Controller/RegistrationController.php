@@ -8,7 +8,6 @@ use App\Repository\UserRepository;
 use App\Service\JWTService;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +23,7 @@ class RegistrationController extends AbstractController
      * User registration
      *
      * @param Request $request
-     * @param ManagerRegistry $doctrine
+     * @param EntityManagerInterface $entityManager
      * @param UserPasswordHasherInterface $userPasswordHasher
      * @param MailerService $mailer
      * @param JWTService $jwt
@@ -32,13 +31,12 @@ class RegistrationController extends AbstractController
      */
     #[Route('/registration', name: 'registration')]
     public function index(Request $request,
-                          ManagerRegistry $doctrine,
+                          EntityManagerInterface $entityManager,
                           UserPasswordHasherInterface $userPasswordHasher,
                           MailerService $mailer,
                           JWTService $jwt,
     ): Response
     {
-        $manager = $doctrine->getManager();
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
 
@@ -48,8 +46,8 @@ class RegistrationController extends AbstractController
             $hashedPassword = $userPasswordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($hashedPassword);
 
-            $manager->persist($user);
-            $manager->flush();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
             // Génération du JWT de l'utilisateur / Generation of the user's JWT
             // Création du header / Header creation
@@ -96,14 +94,14 @@ class RegistrationController extends AbstractController
      * @param $token
      * @param JWTService $jwt
      * @param UserRepository $userRepository
-     * @param EntityManagerInterface $doctrine
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     #[Route('/verif/{token}', name: 'verify_registration')]
     public function verifyRegistration($token,
                                        JWTService $jwt,
                                        UserRepository $userRepository,
-                                       EntityManagerInterface $doctrine
+                                       EntityManagerInterface $entityManager
     ): Response
     {
         // Vérification du token : validité, expiration, modification / Token verification : validity, expiration, modification
@@ -117,7 +115,7 @@ class RegistrationController extends AbstractController
             if($user && !$user->isIsActive())
             {
                 $user->setIsActive(true);
-                $doctrine->flush($user);
+                $entityManager->flush($user);
                 $this->addFlash('success', 'Félicitation, vous venez d\'activer votre compte.');
                 return $this->redirectToRoute('homepage');
             }
