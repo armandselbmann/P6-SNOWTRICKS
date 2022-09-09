@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 class Image
@@ -13,11 +14,14 @@ class Image
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
+    #[Assert\Image(
+        allowPortrait: false
+    )]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $path = null;
+    #[ORM\Column()]
+    private ?bool $featuredImage = false;
 
     #[ORM\ManyToOne(inversedBy: 'images')]
     #[ORM\JoinColumn(nullable: false)]
@@ -40,14 +44,14 @@ class Image
         return $this;
     }
 
-    public function getPath(): ?string
+    public function getfeaturedImage(): ?bool
     {
-        return $this->path;
+        return $this->featuredImage;
     }
 
-    public function setPath(string $path): self
+    public function setfeaturedImage($featuredImage): self
     {
-        $this->path = $path;
+        $this->featuredImage = $featuredImage;
 
         return $this;
     }

@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% form_theme trickForm 'bootstrap_5_layout.html.twig' %}
+
+{% block title %}Ajout d'une figure{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <h1 class="mt-3 mb-5 text-center">Ajouter une figure de Snowboard</h1>
+
+                {{ include('trick/_form.html.twig') }}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
