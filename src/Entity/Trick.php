@@ -21,11 +21,11 @@ class Trick
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
-    private ?string $name = null;
+    private ?string $Name = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
-    private ?string $description = null;
+    private ?string $Description = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -77,24 +77,24 @@ class Trick
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->Name;
     }
 
     public function setName(string $Name): self
     {
-        $this->name = $Name;
+        $this->Name = $Name;
 
         return $this;
     }
 
     public function getDescription(): ?string
     {
-        return $this->description;
+        return $this->Description;
     }
 
     public function setDescription(string $Description): self
     {
-        $this->description = $Description;
+        $this->Description = $Description;
 
         return $this;
     }
@@ -137,7 +137,7 @@ class Trick
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->Name;
     }
 
     /**
