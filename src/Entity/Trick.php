@@ -7,8 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[UniqueEntity('name', message: 'Il existe déjà une figure enregistrée sous ce nom.')]
 class Trick
 {
     #[ORM\Id]
@@ -17,10 +20,12 @@ class Trick
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $Name = null;
+    #[Assert\NotBlank]
+    private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $Description = null;
+    #[Assert\NotBlank]
+    private ?string $description = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -32,16 +37,30 @@ class Trick
     #[ORM\JoinColumn(nullable: false)]
     private ?User $users = null;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Comment::class, orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'tricks',
+        targetEntity: Comment::class,
+        orphanRemoval: true
+    )]
     private Collection $comments;
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Image::class, orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'tricks',
+        targetEntity: Image::class,
+        cascade: ["persist"],
+        orphanRemoval: true
+    )]
     private Collection $images;
 
-    #[ORM\OneToMany(mappedBy: 'tricks', targetEntity: Video::class, orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'tricks',
+        targetEntity: Video::class,
+        cascade: ["persist"],
+        orphanRemoval: true
+    )]
     private Collection $videos;
 
     public function __construct()
@@ -58,24 +77,24 @@ class Trick
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(string $Name): self
+    public function setName(string $name): self
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
 
     public function getDescription(): ?string
     {
-        return $this->Description;
+        return $this->description;
     }
 
-    public function setDescription(string $Description): self
+    public function setDescription(string $description): self
     {
-        $this->Description = $Description;
+        $this->description = $description;
 
         return $this;
     }
@@ -114,6 +133,11 @@ class Trick
         $this->users = $users;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
     /**
