@@ -3,11 +3,58 @@
 {% block title %}Edit Trick{% endblock %}
 
 {% block body %}
-    <h1>Edit Trick</h1>
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-10">
+                    <h1 class="mt-3 mb-5 text-center">Modifier une figure de Snowboard</h1>
+                    {{ form_start(trickForm) }}
 
-    {{ include('trick/_form.html.twig', {'button_label': 'Update'}) }}
+                        {{ include ('image/edit_featuredImage.html.twig') }}
 
-    <a href="{{ path('app_trick_index') }}">back to list</a>
+                        {{ include ('image/edit_image.html.twig') }}
 
-    {{ include('trick/_delete_form.html.twig') }}
+                        {{ include ('image/new_image.html.twig') }}
+
+                        <hr>
+
+                    {% if trick.videos is not null %}
+
+                        {{ include ('video/edit_video.html.twig') }}
+
+                    {% endif %}
+
+                        {{ include ('video/new_video.html.twig') }}
+                        {{ form_row(trickForm.videos, {"attr": {"class": "d-none"}}) }}
+
+                        <hr>
+
+                        {{ include('trick/_form.html.twig') }}
+
+                        <div class="d-flex col-8 mx-auto justify-content-evenly">
+                            <div>
+                                <a href="{{ path('app_trick_delete', {'id': trick.id}) }}"
+                                   class="btn btn-danger"
+                                   role="button"
+                                   onclick="return confirm('Voulez-vous vraiment supprimer cette figure ?')">
+                                    Supprimer
+                                </a>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">Modifier</button>
+                            </div>
+                        </div>
+
+                    {{ form_end(trickForm) }}
+
+                </div>
+            </div>
+        </div>
+
+        <script src="{{ asset('js/delete_media.js') }}"></script>
+        <script src="{{ asset('js/addForm_video.js') }}"></script>
+
+    {% endif %}
 {% endblock %}
+
+

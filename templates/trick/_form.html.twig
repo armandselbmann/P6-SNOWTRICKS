@@ -1,92 +1,17 @@
-{{ form_start(trickForm)}}
+<div class="mb-3 d-grid col-8 mx-auto text-center">
+    {{ form_label(trickForm.name, 'Nom de la figure') }}
+    {{ form_errors(trickForm.name) }}
+    {{ form_widget(trickForm.name) }}
+</div>
 
-    <div class="mb-3 d-grid col-8 mx-auto text-center">
-        {{ form_label(trickForm.name, 'Nom de la figure') }}
-        {{ form_errors(trickForm.name) }}
-        {{ form_widget(trickForm.name) }}
-    </div>
+<div class="mb-3 d-grid col-8 mx-auto text-center">
+    {{ form_label(trickForm.description, 'Description') }}
+    {{ form_errors(trickForm.description) }}
+    {{ form_widget(trickForm.description) }}
+</div>
 
-    <div class="mb-3 d-grid col-8 mx-auto text-center">
-        {{ form_label(trickForm.description, 'Description') }}
-        {{ form_errors(trickForm.description) }}
-        {{ form_widget(trickForm.description) }}
-    </div>
-
-    <div class="mb-3 d-grid col-8 mx-auto text-center">
-        {{ form_label(trickForm.category, 'Sélectionner une catégorie') }}
-        {{ form_errors(trickForm.category) }}
-        {{ form_widget(trickForm.category) }}
-    </div>
-
-    <div class="mb-3 d-grid col-8 mx-auto text-center">
-        <hr>
-    </div>
-
-    <div class="mb-3 d-grid col-8 mx-auto text-center">
-        {{ form_label(trickForm.featured_image, 'Ajouter une photo de mise en avant pour cette figure') }}
-        {{ form_errors(trickForm.featured_image) }}
-        {{ form_widget(trickForm.featured_image) }}
-    </div>
-
-    <div class="mb-3 d-grid col-8 mx-auto text-center">
-        {{ form_label(trickForm.images, 'Ajouter une/des photo(s) à cette figure') }}
-        {{ form_errors(trickForm.images) }}
-        {{ form_widget(trickForm.images) }}
-    </div>
-
-    <div class="mb-3 d-grid col-8 mx-auto text-center">
-        <hr>
-    </div>
-
-    <div class="mb-3 d-grid col-8 mx-auto text-center">
-        <ul class="videos"
-            data-index="{{ trickForm.videos|length > 0 ? trickForm.videos|last.vars.name + 1 : 0 }}"
-            data-prototype="{{ form_widget(trickForm.videos.vars.prototype)|e('html_attr') }}"
-        ></ul>
-        <button type="button" class="add_item_link" data-collection-holder-class="videos">Ajouter une vidéo</button>
-    </div>
-
-    <div class="mb-3 d-grid col-8 mx-auto text-center">
-        {{ form_label(trickForm.videos) }}
-        {{ form_widget(trickForm.videos) }}
-    </div>
-
-    <div class="mb-3 d-grid col-8 mx-auto text-center">
-        <hr>
-    </div>
-
-    <div class="d-grid col-8 mx-auto">
-        <button type="submit" class="btn btn-primary">Valider</button>
-    </div>
-
-{{ form_end(trickForm) }}
-
-<script>
-
-    const addFormToCollection = (e) => {
-        const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
-
-        const item = document.createElement('li');
-
-        item.innerHTML = collectionHolder
-            .dataset
-            .prototype
-            .replace(
-                /__name__/g,
-                collectionHolder.dataset.index
-            );
-
-        collectionHolder.appendChild(item);
-
-        collectionHolder.dataset.index++;
-
-        item.classList.add('list-unstyled', 'justify-content-between');
-    };
-
-    document
-        .querySelectorAll('.add_item_link')
-        .forEach(btn => {
-            btn.addEventListener("click", addFormToCollection)
-        });
-
-</script>
+<div class="mb-3 d-grid col-8 mx-auto text-center">
+    {{ form_label(trickForm.category, 'Sélectionner une catégorie') }}
+    {{ form_errors(trickForm.category) }}
+    {{ form_widget(trickForm.category) }}
+</div>

@@ -6,30 +6,51 @@ namespace App\Service;
 class VideoService
 {
     /**
+     * Video processing
+     *
+     * @param $videos
+     * @return void
+     */
+    public function processingVideos($videos): void
+    {
+        foreach($videos as $video){
+            $link = $video->getLink();
+            $checkVideoLink = self::checkVideoLink($link);
+            $video->setLink($checkVideoLink);
+        }
+    }
+
+    /**
      * Verification of a link and its correspondence with a video platform
      *
-     * @param string $link
-     * @return string
+     * @param string|null $link
+     * @return string|bool
      */
-    public function checkVideoLink(string $link): string
+    private function checkVideoLink(?string $link): string|bool
     {
-        if(str_contains($link, 'youtube.com/embed')) {
+        if(str_contains($link, 'src="https://www.youtube.com')) {
            return $this->obtainUrlVideoYT($link);
         }
-        if(str_contains($link, 'youtu.be') || stristr($link, 'watch?v=')){
+        elseif(str_contains($link, 'youtu.be') || stristr($link, 'watch?v=')){
             return $this->convertUrlVideoYT($link);
         }
-        if(str_contains($link, 'dailymotion.com/embed')) {
+        elseif(str_contains($link, 'src="https://www.dailymotion.com')) {
             return $this->obtainUrlVideoDM($link);
         }
-        if(str_contains($link, 'dai.ly') || stristr($link, 'dailymotion.com/video')){
+        elseif(str_contains($link, 'dai.ly') || stristr($link, 'dailymotion.com/video')){
             return $this->convertUrlVideoDM($link);
         }
-        if(str_contains($link, 'player.vimeo')) {
+        elseif(str_contains($link, 'src="https://player.vimeo')) {
             return $this->obtainUrlVideoVI($link);
         }
-        if(str_contains($link, 'vimeo')) {
+        elseif(str_contains($link, 'https://player.vimeo')) {
+            return $link;
+        }
+        elseif(str_contains($link, 'vimeo')) {
             return $this->convertUrlVideoVI($link);
+        }
+        elseif(str_contains($link, 'embed')) {
+            return $link;
         }
         return '';
     }
