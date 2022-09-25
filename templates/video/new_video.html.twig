@@ -1,0 +1,7 @@
+<div class="mb-3 d-grid col-8 mx-auto text-center">
+    <ul class="videos"
+        data-index="{{ trickForm.videos|length > 0 ? trickForm.videos|last.vars.name + 1 : 0 }}"
+        data-prototype="{{ form_widget(trickForm.videos.vars.prototype)|e('html_attr') }}"
+    ></ul>
+    <button type="button" class="add_item_link" data-collection-holder-class="videos">Ajouter une vidéo</button>
+</div>
