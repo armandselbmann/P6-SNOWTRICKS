@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Form\CommentType;
 use App\Form\TrickType;
+use App\Repository\CommentRepository;
 use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
 use App\Service\ImageService;
@@ -66,11 +69,32 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{name}', name: 'app_trick_show', methods: ['GET'])]
-    public function show(Trick $trick): Response
+    #[Route('/{name}', name: 'app_trick_show', methods: ['GET', 'POST'])]
+    public function show(
+        Trick $trick,
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ): Response
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setTricks($trick);
+            $comment->setUsers($this->getUser());
+            $comment->setCreatedAt(new \DateTimeImmutable());
+
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre commentaire vient d\'être ajouté.');
+            return $this->redirectToRoute('app_trick_show', ['name' => $trick->getName()]);
+        }
+
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
+            'commentForm' => $form->createView(),
         ]);
     }
 
