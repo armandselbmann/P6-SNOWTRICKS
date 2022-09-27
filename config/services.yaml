@@ -7,6 +7,7 @@ parameters:
     admin_email: 'admindev@armand-selbmann.fr'
     jwt_secret: '%env(JWT_SECRET)%'
     images_directory: '%kernel.project_dir%/public/uploads'
+    avatars_directory: '%kernel.project_dir%/public/uploads/avatars'
 
 services:
     # default configuration for services in *this* file
@@ -27,3 +28,6 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Service\AvatarService:
+        arguments:
+            $targetDirectory: '%avatars_directory%'

@@ -49,6 +49,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isActive = false;
 
+    #[ORM\Column(length: 255)]
+    private ?string $avatar = null;
+
     #[ORM\Column(length: 100)]
     private ?string $resetToken;
 
@@ -120,6 +123,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
     public function getResetToken(): ?string
     {
         return $this->resetToken;

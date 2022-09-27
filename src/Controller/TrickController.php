@@ -74,6 +74,7 @@ class TrickController extends AbstractController
         Trick $trick,
         Request $request,
         EntityManagerInterface $entityManager,
+        CommentRepository $commentRepository,
     ): Response
     {
         $comment = new Comment();
@@ -94,6 +95,9 @@ class TrickController extends AbstractController
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
+            'comments' => $commentRepository->findBy(
+                ['tricks' => $trick->getId()],
+                ['createdAt' => 'DESC']),
             'commentForm' => $form->createView(),
         ]);
     }

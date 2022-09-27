@@ -19,11 +19,11 @@
                     <span class="badge bg-info">{{ trick.category.name }}</span>
                 </div>
                 <div>
-                    <p class="m-0">Par {{ trick.users.username }}, le {{ trick.createdAt | date("d/m/Y") }}</p>
+                    <p class="m-0">Par {{ trick.users.username }}, le {{ trick.createdAt|date }}</p>
                 </div>
                 {% if trick.updatedAt is not empty %}
                     <div>
-                        <p class="m-0">Mis à jour le {{ trick.updatedAt | date("d/m/Y") }}</p>
+                        <p class="m-0">Mis à jour le {{ trick.updatedAt|date }}</p>
                     </div>
                 {% endif %}
             </div>
@@ -33,6 +33,33 @@
                 <div class="col-8">
 
                     <h2 class="text-center">Commentaires</h2>
+
+                    {% if comments is not empty %}
+                        {% for comment in comments %}
+                            <div class="card bg-light mb-3">
+                                <div class="card-header d-flex justify-content-between p-1">
+                                        <div class="d-flex justify-content-between p-1">
+                                            <img src="{{ asset('/uploads/avatars/' ~ comment.users.avatar) }}" alt="Avatar" class="img-thumbnail" style="width: 38px; height: 38px">
+                                            <h6 class="align-self-center m-0 ps-2">{{ comment.users.username }}</h6>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <p class="m-0 pe-2">Écrit le {{ comment.createdAt|date }}</p>
+                                        </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text ps-3 pe-3">{{ comment.content|nl2br|raw }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-info text-center">
+                            Il n'y a encore aucun commentaire pour cette figure. </br>
+                            {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                <a href="{{ path('login') }}">Connectez-vous</a> si vous souhaitez en écrire un.
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    <hr>
 
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                         {{ form_start(commentForm) }}

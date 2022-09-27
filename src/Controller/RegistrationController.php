@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationType;
 use App\Repository\UserRepository;
+use App\Service\AvatarService;
 use App\Service\JWTService;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +29,9 @@ class RegistrationController extends AbstractController
      * @param UserPasswordHasherInterface $userPasswordHasher
      * @param MailerService $mailer
      * @param JWTService $jwt
+     * @param AvatarService $avatarService
      * @return Response
+     * @throws Exception
      */
     #[Route('/registration', name: 'registration')]
     public function index(Request $request,
@@ -35,6 +39,7 @@ class RegistrationController extends AbstractController
                           UserPasswordHasherInterface $userPasswordHasher,
                           MailerService $mailer,
                           JWTService $jwt,
+                          AvatarService $avatarService,
     ): Response
     {
         $user = new User();
@@ -43,6 +48,13 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $avatarFile = $form->get('avatar')->getData();
+            if ($avatarFile) {
+                $avatarFileName = $avatarService->upload($avatarFile);
+                $user->setAvatar($avatarFileName);
+            }
+
             $hashedPassword = $userPasswordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($hashedPassword);
 
