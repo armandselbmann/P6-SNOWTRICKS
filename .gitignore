@@ -26,3 +26,5 @@ public/.DS_Store
 ###< PHPStorm ###
 
 public/uploads
+
+node_modules
