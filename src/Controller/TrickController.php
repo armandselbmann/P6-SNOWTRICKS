@@ -79,8 +79,8 @@ class TrickController extends AbstractController
     {
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setTricks($trick);
             $comment->setUsers($this->getUser());
@@ -93,11 +93,18 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('app_trick_show', ['name' => $trick->getName()]);
         }
 
+        $limitComments = 10;
+        $page = (int)$request->query->get("page", 1);
+        $idTrick = $trick->getId();
+        $comments = $commentRepository->getPaginatedComments($idTrick, $page, $limitComments);
+        $totalComments = $commentRepository->getTotalComments($idTrick);
+
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'comments' => $commentRepository->findBy(
-                ['tricks' => $trick->getId()],
-                ['createdAt' => 'DESC']),
+            'comments' => $comments,
+            'totalComments' => $totalComments,
+            'limit' => $limitComments,
+            'page' => $page,
             'commentForm' => $form->createView(),
         ]);
     }
