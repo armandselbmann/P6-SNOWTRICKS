@@ -1,80 +1,64 @@
-<div class="container position-relative">
-    <h1 class="text-center mt-3 mb-3" id="tricks">Figures</h1>
-    <div class="row row-cols-1 row-cols-lg-3 row-cols-xl-4 g-4">
-        {% for trick in tricks %}
-            <div class="col">
-                <div class="card p-2 mb-3">
+{% for trick in tricksToDisplay %}
+    <div class="trick col" id="trick_{{ trick.id }}">
+        <div class="card p-2 mb-3">
+            <!-- Recherche d'une image mise en avant / Search featured image -->
+            {% set featuredImage = "" %}
+            {% for image in trick.images %}
+                {% if image.featuredImage %}
+                    {% set featuredImage = image.name %}
+                {% endif %}
+            {% endfor %}
+            <!-- Si il y a une image mise en avant on l'affiche sinon on affiche une image par défaut -->
+            <!-- If there is a featured image,  we display it otherwise we display a default image -->
+            {% if featuredImage is not empty %}
+                <img src="{{ asset('/uploads/' ~ featuredImage) }}" alt="Image" class="card-img-top">
+            {% else %}
+                <img src="https://unsplash.com/photos/xSNaPoQ0H9M/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NHx8bW91bnRhaW4lMjBzbm93Ym9hcmR8ZW58MHx8fHwxNjU5NjMxNTQz&force=true" alt="Default image" class="card-img-top">
+            {% endif %}
+            <div class="card-body">
+                <div class="d-flex justify-content-around align-items-center">
+                    <a href="{{ path('app_trick_show', {'name': trick.name}) }}" class="nav-link"><h4 class="card-title text-center m-0">{{ trick.name }}</h4></a>
+                    <!-- Options de modification et de suppression visibles si l'utilisateur est connecté / Edit and Delete option if logged in User -->
+                    {%  if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <a href="{{ path('app_trick_edit', {'name': trick.name}) }}">
+                            <button class="btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                                </svg>
+                            </button>
+                        </a>
 
-                    <!-- Recherche d'une image mise en avant / Search featured image -->
-                    {% set featuredImage = "" %}
-                    {% for image in trick.images %}
-                        {% if image.featuredImage %}
-                            {% set featuredImage = image.name %}
-                        {% endif %}
-                    {% endfor %}
+                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteTrick_{{ trick.id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                            </svg>
+                        </button>
 
-                    <!-- Si il y a une image mise en avant on l'affiche sinon on affiche une image par défaut -->
-                    <!-- If there is a featured image,  we display it otherwise we display a default image -->
-                    {% if featuredImage is not empty %}
-                        <img src="{{ asset('/uploads/' ~ featuredImage) }}" alt="Image" class="card-img-top">
-                    {% else %}
-                        <img src="https://unsplash.com/photos/xSNaPoQ0H9M/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NHx8bW91bnRhaW4lMjBzbm93Ym9hcmR8ZW58MHx8fHwxNjU5NjMxNTQz&force=true" alt="Default image" class="card-img-top">
-                    {% endif %}
-
-                    <div class="card-body">
-                        <div class="d-flex justify-content-around align-items-center">
-                            <a href="{{ path('app_trick_show', {'name': trick.name}) }}" class="nav-link"><h4 class="card-title text-center m-0">{{ trick.name }}</h4></a>
-
-                            <!-- Options de modification et de suppression visibles si l'utilisateur est connecté / Edit and Delete option if logged in User -->
-                            {%  if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                                <a href="{{ path('app_trick_edit', {'name': trick.name}) }}">
-                                    <button class="btn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                                        </svg>
-                                    </button>
-                                </a>
-
-                                <a href="{{ path('app_trick_delete', {'id': trick.id}) }}" onclick="return confirm('Voulez-vous vraiment supprimer cette figure ?')">
-                                    <button class="btn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                        </svg>
-                                    </button>
-                                </a>
-
-                            {%  endif %}
-
+                        <!-- Modal Delete Trick-->
+                        <div class="modal fade" id="deleteTrick_{{ trick.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="0" aria-labelledby="deleteTrickLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteTrickLabel">Suppression d'une figure</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Êtes-vous sûr de vouloir supprimer cette figure : {{ trick.name }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
+                                        <a class="btn btn-primary" type="button" href="{{ path('app_trick_delete', {'id': trick.id}) }}">
+                                            Oui
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+
+                    {%  endif %}
                 </div>
             </div>
-        {% endfor %}
-    </div>
-</div>
-
-<div class="container">
-    <div class="row d-flex justify-content-center">
-        <div class="col-4 d-flex justify-content-center">
-            <a href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-patch-plus" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5z"/>
-                    <path d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z"/>
-                </svg>
-            </a>
         </div>
     </div>
-</div>
-
-<div class="container-fluid position-relative">
-    <div class="row position-absolute bottom-0 end-0 pe-2 p-0 m-0">
-        <div class="col">
-            <a href="#tricks" >
-                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-caret-up-square-fill" viewBox="0 0 16 16">
-                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4 9h8a.5.5 0 0 0 .374-.832l-4-4.5a.5.5 0 0 0-.748 0l-4 4.5A.5.5 0 0 0 4 11z"/>
-                </svg>
-            </a>
-        </div>
-    </div>
-</div>
+{% endfor %}
