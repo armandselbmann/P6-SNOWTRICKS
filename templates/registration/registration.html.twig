@@ -17,6 +17,11 @@
                     {{ form_widget(formRegistration.username) }}
                 </div>
                 <div class="mb-3 d-grid col-6 mx-auto text-center">
+                    {{ form_label(formRegistration.avatar, 'Avatar (jpg file)') }}
+                    {{ form_errors(formRegistration.avatar) }}
+                    {{ form_widget(formRegistration.avatar) }}
+                </div>
+                <div class="mb-3 d-grid col-6 mx-auto text-center">
                     {{ form_label(formRegistration.email, 'Email') }}
                     {{ form_errors(formRegistration.email) }}
                     {{ form_widget(formRegistration.email) }}

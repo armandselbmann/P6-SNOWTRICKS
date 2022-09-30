@@ -35,8 +35,8 @@ class TrickType extends AbstractType
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('c')
-                    ->orderBy('c.name', 'ASC');
+                return $er->createQueryBuilder('query')
+                    ->orderBy('query.name', 'ASC');
                 },
                 'choice_label' => 'name',
             ] )
@@ -47,7 +47,7 @@ class TrickType extends AbstractType
                 'required' => false,
                 "constraints" => [
                     new File([
-                        "maxSize" => "2M",
+                        "maxSize" => "5M",
                         "mimeTypes" => [
                             "image/png",
                             "image/jpg",
@@ -73,9 +73,11 @@ class TrickType extends AbstractType
                     'label' => false
                 ],
                 'allow_add' => true,
+                'allow_delete' => true,
                 'prototype' => true,
                 'by_reference' => false,
                 'required' => false,
+                'error_bubbling' => false
             ])
         ;
     }

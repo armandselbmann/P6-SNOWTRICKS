@@ -6,88 +6,41 @@
 
     <div class="container">
         <div class="card p-2 mt-3 mb-3">
-
-            <!-- Trick name & featured image ------------------------>
-            <div class="container-fluid p-0 position-relative">
-                <div class="alert alert-dismissible alert-light position-absolute top-50 start-50 translate-middle" style="opacity: 0.6; width: 350px; height:70px"></div>
-                <h2 class="text-center text-dark position-absolute top-50 start-50 translate-middle">{{ trick.name }}</h2>
-
-                <!-- Recherche d'une image mise en avant / Search featured image -->
-                {% set featuredImage = "" %}
-                {% for image in trick.images %}
-                    {% if image.featuredImage %}
-                        {% set featuredImage = image.name %}
-                    {% endif %}
-                {% endfor %}
-
-                <!-- Si oui on l'affiche sinon on affiche une image par défaut / If yes we display it otherwise we display a default image -->
-                {% if featuredImage is not empty %}
-                    <img src="{{ asset('/uploads/' ~ featuredImage) }}" alt="Image" class="card-img-top rounded-2">
-                {% else %}
-                    <img src="https://unsplash.com/photos/xSNaPoQ0H9M/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NHx8bW91bnRhaW4lMjBzbm93Ym9hcmR8ZW58MHx8fHwxNjU5NjMxNTQz&force=true" class="card-img-top" alt="Default image">
-                {% endif %}
-            </div>
-
-            <!-- Images ------------------------>
-            <div class="d-flex flex-wrap justify-content-center">
-                {% for image in trick.images %}
-                        <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" class="w-25 p-3">
-                {% endfor %}
-            </div>
-
-            <!-- Videos ------------------------>
-            <div class="d-flex flex-wrap justify-content-center">
-                {% if trick.videos is not empty %}
-                    {% for video in trick.videos %}
-                        {% if video.link is empty %}
-                            <div class="d-flex justify-content-center align-items-center border border-warning p-2 m-2">
-                                Video -> Erreur d'affichage
-                            </div>
-                        {%  else %}
-                            <div class="medias d-flex justify-content-center m-2">
-                                <iframe
-                                        width="380"
-                                        height="230"
-                                        src="{{video.link}}"
-                                        title="Video Player"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowfullscreen
-                                >
-                                </iframe>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            </div>
+            {{ include('image/show.html.twig') }}
+            {{ include('video/show.html.twig') }}
             <hr>
-
-            <!-- Trick description ------------------------>
             <div class="col-10 align-self-center">
                 <p class="p-2">{{ trick.description | nl2br }}</p>
             </div>
             <hr>
-
-            <!-- Name and category ------------------------>
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h2 class="m-0">{{ trick.name }}</h2>
                     <span class="badge bg-info">{{ trick.category.name }}</span>
                 </div>
                 <div>
-                    <p class="m-0">Par {{ trick.users.username }}, le {{ trick.createdAt | date("d/m/Y") }}</p>
+                    <p class="m-0">Par {{ trick.users.username }}, le {{ trick.createdAt|date }}</p>
                 </div>
                 {% if trick.updatedAt is not empty %}
                     <div>
-                        <p class="m-0">Mis à jour le {{ trick.updatedAt | date("d/m/Y") }}</p>
+                        <p class="m-0">Mis à jour le {{ trick.updatedAt|date }}</p>
                     </div>
                 {% endif %}
             </div>
             <hr>
 
-            <!-- COMMENT SPACE ------------------------>
-            <h2 class="text-center">Commentaires</h2>
+            <div class="row justify-content-center">
+                <div class="col-8">
+
+                    <h2 id="commentaires" class="text-center">Commentaires</h2>
+
+                    {{ include('comment/show.html.twig') }}
+
+                </div>
+            </div>
 
         </div>
     </div>
 
+    <script src="{{ asset('js/delete_comment.js') }}"></script>
 {% endblock %}

@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +39,42 @@ class CommentRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * Get all Comments for a Trick
+     *
+     * @param $idTrick
+     * @param $page
+     * @param $limit
+     * @return array
+     */
+    public function getPaginatedComments($idTrick, $page, $limit): array
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.tricks = '.$idTrick)
+            ->orderBy('c.createdAt', 'DESC')
+            ->setFirstResult(($page * $limit) - $limit)
+            ->setMaxResults($limit)
+            ;
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Get the total number of Comments for a Trick
+     *
+     * @param $idTrick
+     * @return int
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function getTotalComments($idTrick): int
+    {
+        $query = $this->createQueryBuilder('c')
+            ->select('COUNT(c)')
+            ->where('c.tricks = '. $idTrick)
+            ;
+            return $query->getQuery()->getSingleScalarResult();
     }
 
 //    /**

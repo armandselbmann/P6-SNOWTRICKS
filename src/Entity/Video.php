@@ -30,7 +30,7 @@ class Video
         return $this->link;
     }
 
-    public function setLink(string $link): self
+    public function setLink(?string $link): self
     {
         $this->link = $link;
 

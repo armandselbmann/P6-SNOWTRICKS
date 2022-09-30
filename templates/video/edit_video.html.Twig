@@ -1,0 +1,33 @@
+<div class="d-flex flex-wrap justify-content-center">
+    {% if trick.videos is not empty %}
+        {% for video in trick.videos %}
+            {% if video.link is empty %}
+                <div class="d-flex flex-column w-50 p-2">
+                    <div class="d-flex justify-content-center align-items-center border border-warning p-2 m-2">
+                        Video -> Erreur d'affichage
+                    </div>
+                    <div class="d-flex justify-content-evenly">
+                        {{ include('video/_delete_video.html.twig') }}
+                    </div>
+                </div>
+            {%  else %}
+                <div class="d-flex flex-column w-50 p-2">
+                    <div class="medias d-flex justify-content-center m-2">
+                        <iframe
+                                width="380"
+                                height="230"
+                                src="{{video.link}}"
+                                title="Video Player"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                        >
+                        </iframe>
+                    </div>
+                    <div class="d-flex justify-content-evenly">
+                        {{ include('video/_delete_video.html.twig') }}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>
