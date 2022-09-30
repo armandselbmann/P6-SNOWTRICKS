@@ -28,19 +28,12 @@ class AvatarService
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
 
         try {
-            $file->move($this->getTargetDirectory(), $fileName);
+            $file->move($this->targetDirectory, $fileName);
         } catch (FileException $e) {
             throw new Exception("Problème rencontré lors de l'enregistrement de votre image.");
         }
 
         return $fileName;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getTargetDirectory(): string
-    {
-    return $this->targetDirectory;
-    }
+    
 }
