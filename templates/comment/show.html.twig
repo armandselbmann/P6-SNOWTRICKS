@@ -1,3 +1,16 @@
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    {{ form_start(commentForm) }}
+    {{ form_widget(commentForm) }}
+    <div class="d-grid col-8 mx-auto">
+        <button type="submit" class="btn btn-secondary">Ajouter ce commentaire</button>
+    </div>
+    {{ form_end(commentForm) }}
+{% else %}
+    <div class="alert alert-info text-center">
+        <a href="{{ path('login') }}">Connectez-vous</a> si vous souhaitez écrire un commentaire.
+    </div>
+{% endif %}
+<hr>
 {% if comments is not empty %}
     {% for comment in comments %}
         <div class="card bg-light mb-3">
@@ -19,29 +32,19 @@
         </div>
     {% endfor %}
 
-    <ul class="pagination justify-content-center">
-        {% for item in 1..((totalComments / limit)|round(0, 'ceil')) %}
-            <li class="page-item p-1 {{ (page == item) ? 'active' : '' }}">
-                <a class="page-link" href="?page={{ item }}#commentaires">{{ item }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+
+    {% if totalComments > limit %}
+        <ul class="pagination justify-content-center">
+            {% for item in 1..((totalComments / limit)|round(0, 'ceil')) %}
+                <li class="page-item p-1 {{ (page == item) ? 'active' : '' }}">
+                    <a class="page-link" href="?page={{ item }}#commentaires">{{ item }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
 {% else %}
     <div class="alert alert-secondary text-center">
         Il n'y a encore aucun commentaire pour cette figure.
-    </div>
-{% endif %}
-<hr>
-
-{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-    {{ form_start(commentForm) }}
-        {{ form_widget(commentForm) }}
-        <div class="d-grid col-8 mx-auto">
-            <button type="submit" class="btn btn-secondary">Ajouter ce commentaire</button>
-        </div>
-    {{ form_end(commentForm) }}
-{% else %}
-    <div class="alert alert-info text-center">
-        <a href="{{ path('login') }}">Connectez-vous</a> si vous souhaitez écrire un commentaire.
     </div>
 {% endif %}
