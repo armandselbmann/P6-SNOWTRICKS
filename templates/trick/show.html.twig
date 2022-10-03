@@ -3,14 +3,12 @@
 {% block title %}{{ trick.name }}{% endblock %}
 
 {% block body %}
-
     <div class="container">
-    <div class="card p-2 mt-3 mb-3">
+        <div class="card p-2 mt-3 mb-3">
+            {{ include('image/show_featuredImage.html.twig') }}
+            <hr>
 
-        {{ include('image/show_featuredImage.html.twig') }}
-        <hr>
-
-        <div class="display-media d-lg-block d-none">
+            <div class="display-media d-lg-block d-none">
                 {{ include('image/show.html.twig') }}
                 {{ include('video/show.html.twig') }}
             </div>
@@ -45,20 +43,14 @@
                 {% endif %}
             </div>
             <hr>
-
             <div class="row justify-content-center">
                 <div class="col-8">
-
                     <h2 id="commentaires" class="text-center">Commentaires</h2>
-
                     {{ include('comment/show.html.twig') }}
-
                 </div>
             </div>
-
         </div>
     </div>
-
 {% endblock %}
 
 {% block javascripts %}
@@ -66,7 +58,7 @@
     {{parent() }}
 
     <script src="{{ asset('js/display_media.js') }}"></script>
-    <script src="{{ asset('js/delete_media.js') }}"></script>
+    <script src="{{ asset('js/delete_comment.js') }}"></script>
     <script src="{{ asset('js/addForm_video.js') }}"></script>
 
 {% endblock %}

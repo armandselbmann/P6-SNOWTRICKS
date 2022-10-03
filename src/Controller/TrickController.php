@@ -99,7 +99,7 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
         }
 
-        $limitComments = 10;
+        $limitComments = 5;
         $page = (int)$request->query->get("page", 1);
         $idTrick = $trick->getId();
         $comments = $commentRepository->getPaginatedComments($idTrick, $page, $limitComments);
