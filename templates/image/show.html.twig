@@ -1,31 +1,18 @@
-<div class="container-fluid p-0 position-relative">
-
-    <div class="alert alert-dismissible alert-light position-absolute top-50 start-50 translate-middle" style="opacity: 0.6; width: 350px; height:70px"></div>
-    <h2 class="text-center text-dark position-absolute top-50 start-50 translate-middle">{{ trick.name }}</h2>
-
-    {% set featuredImage = "" %}
-    {% for image in trick.images %}
-        {% if image.featuredImage %}
-            {% set featuredImage = image.name %}
-        {% endif %}
-    {% endfor %}
-
-    {% if featuredImage is not empty %}
-        <img src="{{ asset('/uploads/' ~ featuredImage) }}" alt="Image" class="card-img-top rounded-2">
+<div class="container-fluid">
+    {% if trick.images is not empty %}
+        <div class="row">
+            {% for image in trick.images %}
+                {% if not image.featuredImage %}
+                    <div class="col-12 col-lg-6 p-3">
+                        <img class="img-fluid" src="{{ asset('/uploads/' ~ image.name) }}" alt="Image">
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
     {% else %}
-        <img src="https://unsplash.com/photos/xSNaPoQ0H9M/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NHx8bW91bnRhaW4lMjBzbm93Ym9hcmR8ZW58MHx8fHwxNjU5NjMxNTQz&force=true" class="card-img-top" alt="Default image">
+        <div class="alert alert-info text-center m-3">
+            Il n'y a pas encore d'images pour cette figure.
+        </div>
     {% endif %}
-
 </div>
 
-<div class="d-flex flex-row flex-wrap">
-
-    {% for image in trick.images %}
-        {% if not image.featuredImage %}
-            <div class="d-flex flex-column w-50 p-2">
-                <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image">
-            </div>
-        {% endif %}
-    {% endfor %}
-
-</div>

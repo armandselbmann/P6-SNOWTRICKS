@@ -1,0 +1,15 @@
+<div class="container-fluid p-0 position-relative">
+    <div class="alert alert-dismissible alert-light position-absolute top-50 start-50 translate-middle" style="opacity: 0.6; width: 350px; height:70px"></div>
+    <h2 class="text-center text-dark position-absolute top-50 start-50 translate-middle">{{ trick.name }}</h2>
+    {% set featuredImage = "" %}
+    {% for image in trick.images %}
+        {% if image.featuredImage %}
+            {% set featuredImage = image.name %}
+        {% endif %}
+    {% endfor %}
+    {% if featuredImage is not empty %}
+        <img src="{{ asset('/uploads/' ~ featuredImage) }}" alt="Image" class="card-img-top rounded-2">
+    {% else %}
+        <img src="https://unsplash.com/photos/xSNaPoQ0H9M/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NHx8bW91bnRhaW4lMjBzbm93Ym9hcmR8ZW58MHx8fHwxNjU5NjMxNTQz&force=true" class="card-img-top" alt="Default image">
+    {% endif %}
+</div>
