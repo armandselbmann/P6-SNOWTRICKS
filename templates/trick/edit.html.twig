@@ -12,21 +12,25 @@
 
                         {{ include ('image/edit_featuredImage.html.twig') }}
 
-                        {{ include ('image/edit_image.html.twig') }}
+                        <div class="display-media d-lg-block d-none">
+                            {{ include ('image/edit_image.html.twig') }}
+                            {{ include ('image/new_image.html.twig') }}
+                            <hr>
+                            {% if trick.videos is not null %}
+                                {{ include ('video/edit_video.html.twig') }}
+                            {% endif %}
+                            {{ include ('video/new_video.html.twig') }}
+                            {{ form_row(trickForm.videos, {"attr": {"class": "d-none"}}) }}
+                        </div>
 
-                        {{ include ('image/new_image.html.twig') }}
-
-                        <hr>
-
-                    {% if trick.videos is not null %}
-
-                        {{ include ('video/edit_video.html.twig') }}
-
-                    {% endif %}
-
-                        {{ include ('video/new_video.html.twig') }}
-                        {{ form_row(trickForm.videos, {"attr": {"class": "d-none"}}) }}
-
+                        <div class="text-center p-2">
+                            <div class="d-md-block d-lg-none">
+                                    <button id="loadMedia" class="btn btn-primary p-2 ">Afficher les médias</button>
+                            </div>
+                            <div class="d-md-block d-lg-none ">
+                                <button id="hideMedia" class="btn btn-primary p-2 d-none">Masquer les médias</button>
+                            </div>
+                        </div>
                         <hr>
 
                         {{ include('trick/_form.html.twig') }}
@@ -50,11 +54,15 @@
                 </div>
             </div>
         </div>
-
-        <script src="{{ asset('js/delete_media.js') }}"></script>
-        <script src="{{ asset('js/addForm_video.js') }}"></script>
-
     {% endif %}
 {% endblock %}
 
+{% block javascripts %}
 
+    {{parent() }}
+
+    <script src="{{ asset('js/display_media.js') }}"></script>
+    <script src="{{ asset('js/delete_media.js') }}"></script>
+    <script src="{{ asset('js/addForm_video.js') }}"></script>
+
+{% endblock %}
