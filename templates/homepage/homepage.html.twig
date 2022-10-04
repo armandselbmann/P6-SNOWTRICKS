@@ -29,11 +29,14 @@
         </div>
     </div>
 
-    <div class="text-center">
-        <button class="btn btn-info load-more" type="button">Afficher plus de figures</button>
-        <input type="hidden" id="totalDisplayTricks" value="{{ totalDisplayTricks }}">
-        <input type="hidden" id="totalAllTricks" value="{{ totalAllTricks }}">
-    </div>
+    {% if totalAllTricks > totalDisplayTricks %}
+        <div class="text-center">
+            <button class="btn btn-info load-more" type="button">Afficher plus de figures</button>
+            <input type="hidden" id="totalDisplayTricks" value="{{ totalDisplayTricks }}">
+            <input type="hidden" id="totalAllTricks" value="{{ totalAllTricks }}">
+            <input type="hidden" id="tricksPerLoading" value="{{ tricksPerLoading }}">
+        </div>
+    {% endif %}
 
     <div class="container-fluid position-relative">
         <div class="row position-absolute bottom-0 end-0 pe-2 p-0 m-0">
@@ -50,55 +53,6 @@
 {% endblock %}
 
 {% block javascripts %}
-
     {{parent() }}
-
-    <script>
-        $(document).ready(function(){
-
-            // Load more data
-            $('.load-more').click(function(){
-                var totalDisplayTricks = Number($('#totalDisplayTricks').val());
-                var totalAllTricks = Number($('#totalAllTricks').val());
-
-                if(totalDisplayTricks <= totalAllTricks){
-                    $("#totalDisplayTricks").val(totalDisplayTricks + {{ tricksPerLoading }});
-
-
-
-                    $.ajax({
-                        url: '{{ path('get_data') }}',
-                        type: 'post',
-                        data: {totalDisplayTricks:totalDisplayTricks},
-                        beforeSend:function(){
-                            $(".load-more").text("Chargement...");
-                        },
-                        success: function(response){
-
-                            // Setting little delay while displaying new content
-                            setTimeout(function() {
-                                // Appending tricks after last trick with class="trick"
-                                $(".trick:last").after(response).show().fadeIn("slow");
-
-                                var totalDisplayTricks = Number($('#totalDisplayTricks').val());
-                                // checking tricksNumber value is greater than totalTricks or not
-
-                                if(totalDisplayTricks >= totalAllTricks){
-                                    // Change the text and background
-                                    $('.load-more').text("---");
-                                    $('.load-more').css("background","#384D7E");
-                                }else{
-                                    $(".load-more").text("Afficher plus de figures");
-                                    if(totalDisplayTricks > 15) {
-                                        $("#arrow-top").show();
-                                    }
-                                }
-                            }, 2000);
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-
+    <script src="{{ asset('js/loadMore.js') }}"></script>
 {% endblock %}
