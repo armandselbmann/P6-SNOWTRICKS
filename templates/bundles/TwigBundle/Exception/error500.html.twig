@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Problème de serveur {% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-8 text-center alert alert-danger mt-5">
+                <h2 class="text-center">Erreur 500 - Problème de serveur</h2>
+                <p>Le serveur rencontre un problème.</p>
+                <p>Veuillez nous prévenir de ce problème via cet <a href="mailto:admindev@armand-selbmann.fr">email</a> ou
+                    vous rediriger vers la <a href="{{ path('homepage') }}"> page d'accueil</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
