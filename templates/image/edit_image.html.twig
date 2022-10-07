@@ -1,8 +1,8 @@
-<div class="d-flex flex-row flex-wrap">
+<div class="row">
     {% for image in trick.images %}
         {% if not image.featuredImage %}
-            <div class="d-flex flex-column w-50 p-2">
-                <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image">
+            <div class="col-12 col-lg-6 p-1">
+                <img class="img-fluid" src="{{ asset('/uploads/' ~ image.name) }}" alt="Image">
                 <div class="d-flex justify-content-evenly mt-1">
                     {{ include('image/_delete_image.html.twig') }}
                 </div>

@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/trick')]
 class TrickController extends AbstractController
@@ -35,7 +36,8 @@ class TrickController extends AbstractController
         TrickRepository $trickRepository,
         VideoService $videoService,
         ImageRepository $imageRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        SluggerInterface $slugger
     ): Response
     {
         $trick = new Trick();
@@ -57,6 +59,10 @@ class TrickController extends AbstractController
 
             $trick->setCreatedAt(new \DateTimeImmutable());
             $trick->setUsers($this->getUser());
+
+            $slug = strtolower($slugger->slug($trick->getName()));
+            $trick->setSlug($slug);
+
             $trickRepository->add($trick, true);
 
             $this->addFlash('success', 'La figure vient d\'être enregistrée.');
@@ -69,7 +75,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{name}', name: 'app_trick_show', methods: ['GET', 'POST'])]
+    #[Route('/{slug}', name: 'app_trick_show', methods: ['GET', 'POST'])]
     public function show(
         Trick $trick,
         Request $request,
@@ -90,10 +96,10 @@ class TrickController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Votre commentaire vient d\'être ajouté.');
-            return $this->redirectToRoute('app_trick_show', ['name' => $trick->getName()]);
+            return $this->redirectToRoute('app_trick_show', ['slug' => $trick->getSlug()]);
         }
 
-        $limitComments = 10;
+        $limitComments = 5;
         $page = (int)$request->query->get("page", 1);
         $idTrick = $trick->getId();
         $comments = $commentRepository->getPaginatedComments($idTrick, $page, $limitComments);
@@ -109,7 +115,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{name}/edit', name: 'app_trick_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{slug}', name: 'app_trick_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         Trick $trick,
@@ -117,6 +123,7 @@ class TrickController extends AbstractController
         ImageRepository $imageRepository,
         VideoService $videoService,
         EntityManagerInterface $entityManager,
+        SluggerInterface $slugger
     ): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
@@ -135,6 +142,10 @@ class TrickController extends AbstractController
             $videoService->processingVideos($trick->getVideos());
 
             $trick->setUpdatedAt(new \DateTimeImmutable());
+
+            $slug = strtolower($slugger->slug($trick->getName()));
+            $trick->setSlug($slug);
+
             $trickRepository->add($trick, true);
 
             $this->addFlash('success', 'Modification effectuée.');

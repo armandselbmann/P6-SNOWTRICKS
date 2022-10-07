@@ -3,16 +3,31 @@
 {% block title %}{{ trick.name }}{% endblock %}
 
 {% block body %}
-
     <div class="container">
         <div class="card p-2 mt-3 mb-3">
-            {{ include('image/show.html.twig') }}
-            {{ include('video/show.html.twig') }}
+            {{ include('image/show_featuredImage.html.twig') }}
             <hr>
-            <div class="col-10 align-self-center">
+
+            <div class="display-media d-lg-block d-none">
+                {{ include('image/show.html.twig') }}
+                {{ include('video/show.html.twig') }}
+            </div>
+
+            <div class="text-center p-2">
+                <div class="d-md-block d-lg-none">
+                    <button id="loadMedia" class="btn btn-primary p-2 ">Afficher les médias</button>
+                </div>
+                <div class="d-md-block d-lg-none ">
+                    <button id="hideMedia" class="btn btn-primary p-2 d-none">Masquer les médias</button>
+                </div>
+            </div>
+            <hr>
+
+            <div class="col-12">
                 <p class="p-2">{{ trick.description | nl2br }}</p>
             </div>
             <hr>
+
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h2 class="m-0">{{ trick.name }}</h2>
@@ -28,19 +43,22 @@
                 {% endif %}
             </div>
             <hr>
-
             <div class="row justify-content-center">
                 <div class="col-8">
-
                     <h2 id="commentaires" class="text-center">Commentaires</h2>
-
                     {{ include('comment/show.html.twig') }}
-
                 </div>
             </div>
-
         </div>
     </div>
+{% endblock %}
 
+{% block javascripts %}
+
+    {{parent() }}
+
+    <script src="{{ asset('js/display_media.js') }}"></script>
     <script src="{{ asset('js/delete_comment.js') }}"></script>
+    <script src="{{ asset('js/addForm_video.js') }}"></script>
+
 {% endblock %}

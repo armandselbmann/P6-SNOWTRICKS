@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Méthode non autorisée {% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-8 text-center alert alert-warning mt-5">
+                <h2 class="text-center">Erreur 405 - Méthode non autorisée</h2>
+                <p>Le site rencontre un problème de méthode non autorisée. </br>
+                    Veuillez attendre le chargement complet de la page prédédente
+                    avant de réitérer l'opération que vous souhaitiez exécuter.</p>
+                <p>Dans le cas où ce problème persiterait, veuillez nous en prévenir via cet <a href="mailto:admindev@armand-selbmann.fr">email</a></p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

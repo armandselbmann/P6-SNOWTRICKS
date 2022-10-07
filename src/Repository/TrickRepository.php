@@ -39,6 +39,34 @@ class TrickRepository extends ServiceEntityRepository
         }
     }
 
+    public function countAllTricks(): int
+    {
+        $query = $this->createQueryBuilder('t')
+            ->select('COUNT(t)')
+        ;
+        return $query->getQuery()->getSingleScalarResult();
+    }
+
+    public function getFirstTricks($tricksForStarting)
+    {
+        $query = $this->createQueryBuilder('t')
+            ->orderBy('t.createdAt')
+            ->setFirstResult(0)
+            ->setMaxResults($tricksForStarting)
+            ;
+        return $query->getQuery()->getResult();
+    }
+
+    public function getMoreTricks($tricksAlreadyLoaded, $tricksPerLoading)
+    {
+        $query = $this->createQueryBuilder('t')
+            ->orderBy('t.createdAt')
+            ->setFirstResult($tricksAlreadyLoaded)
+            ->setMaxResults($tricksPerLoading)
+            ;
+        return $query->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Trick[] Returns an array of Trick objects
 //     */

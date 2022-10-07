@@ -20,6 +20,39 @@
         </div>
     </div>
 
-    {{ include ('trick/index.html.twig') }}
+    <div class="container position-relative">
+        <h1 class="text-center mt-3 mb-3" id="tricks">Figures</h1>
+        <div class="row row-cols-1 row-cols-lg-3 row-cols-xl-4 g-4">
 
+            {{include ('trick/index.html.Twig')}}
+
+        </div>
+    </div>
+
+    {% if totalAllTricks > totalDisplayTricks %}
+        <div class="text-center">
+            <button class="btn btn-info load-more" type="button">Afficher plus de figures</button>
+            <input type="hidden" id="totalDisplayTricks" value="{{ totalDisplayTricks }}">
+            <input type="hidden" id="totalAllTricks" value="{{ totalAllTricks }}">
+            <input type="hidden" id="tricksPerLoading" value="{{ tricksPerLoading }}">
+        </div>
+    {% endif %}
+
+    <div class="container-fluid position-relative">
+        <div class="row position-absolute bottom-0 end-0 pe-2 p-0 m-0">
+            <div class="col" id="arrow-top" style="display: none">
+                <a href="#tricks" >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-caret-up-square-fill" viewBox="0 0 16 16">
+                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4 9h8a.5.5 0 0 0 .374-.832l-4-4.5a.5.5 0 0 0-.748 0l-4 4.5A.5.5 0 0 0 4 11z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{parent() }}
+    <script src="{{ asset('js/loadMore.js') }}"></script>
 {% endblock %}

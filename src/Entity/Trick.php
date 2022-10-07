@@ -23,6 +23,9 @@ class Trick
     #[Assert\NotBlank]
     private ?string $name = null;
 
+    #[ORM\Column]
+    private ?string $slug = null;
+
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
     private ?string $description = null;
@@ -40,6 +43,7 @@ class Trick
     #[ORM\OneToMany(
         mappedBy: 'tricks',
         targetEntity: Comment::class,
+        cascade: ["persist"],
         orphanRemoval: true
     )]
     private Collection $comments;
@@ -85,6 +89,16 @@ class Trick
         $this->name = $name;
 
         return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): void
+    {
+        $this->slug = $slug;
     }
 
     public function getDescription(): ?string
