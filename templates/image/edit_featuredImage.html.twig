@@ -13,7 +13,7 @@
 
     {% if featuredImage is not empty %}
 
-        <img src="{{ asset('/uploads/' ~ featuredImage) }}" alt="Image" class="card-img-top rounded-2">
+        <img src="{{ asset('/uploads/images/' ~ featuredImage) }}" alt="Image" class="card-img-top rounded-2">
         <div class="d-flex position-absolute bg-light top-0 end-0 p-2">
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 {{ include ('image/_modal_edit_featuredImage.html.twig') }}
