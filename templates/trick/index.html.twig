@@ -11,7 +11,7 @@
             <!-- Si il y a une image mise en avant on l'affiche sinon on affiche une image par défaut -->
             <!-- If there is a featured image,  we display it otherwise we display a default image -->
             {% if featuredImage is not empty %}
-                <img src="{{ asset('/uploads/' ~ featuredImage) }}" alt="Image" class="card-img-top">
+                <img src="{{ asset('/uploads/images/' ~ featuredImage) }}" alt="Image" class="card-img-top">
             {% else %}
                 <img src="https://unsplash.com/photos/xSNaPoQ0H9M/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NHx8bW91bnRhaW4lMjBzbm93Ym9hcmR8ZW58MHx8fHwxNjU5NjMxNTQz&force=true" alt="Default image" class="card-img-top">
             {% endif %}

@@ -2,7 +2,7 @@
     {% for image in trick.images %}
         {% if not image.featuredImage %}
             <div class="col-12 col-lg-6 p-1">
-                <img class="img-fluid" src="{{ asset('/uploads/' ~ image.name) }}" alt="Image">
+                <img class="img-fluid" src="{{ asset('/uploads/images/' ~ image.name) }}" alt="Image">
                 <div class="d-flex justify-content-evenly mt-1">
                     {{ include('image/_delete_image.html.twig') }}
                 </div>
