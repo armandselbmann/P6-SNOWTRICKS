@@ -4,7 +4,7 @@
             {% for image in trick.images %}
                 {% if not image.featuredImage %}
                     <div class="col-12 col-lg-6 p-3">
-                        <img class="img-fluid" src="{{ asset('/uploads/' ~ image.name) }}" alt="Image">
+                        <img class="img-fluid" src="{{ asset('/uploads/images/' ~ image.name) }}" alt="Image">
                     </div>
                 {% endif %}
             {% endfor %}

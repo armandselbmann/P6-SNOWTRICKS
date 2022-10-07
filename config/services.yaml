@@ -6,7 +6,7 @@
 parameters:
     admin_email: 'admindev@armand-selbmann.fr'
     jwt_secret: '%env(JWT_SECRET)%'
-    images_directory: '%kernel.project_dir%/public/uploads'
+    images_directory: '%kernel.project_dir%/public/uploads/images'
     avatars_directory: '%kernel.project_dir%/public/uploads/avatars'
 
 services:
