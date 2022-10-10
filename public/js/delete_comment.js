@@ -24,11 +24,11 @@ window.onload = () => {
                 ).then((data) => {
                 if (data.success)
                     this.parentElement.parentElement.remove(),
-                        window.location.reload();
+                    window.location.reload();
                     else alert(data.error);
                 })
-            .catch(e => alert(e));
+            .catch((e) => alert(e));
         }
-        });
+    });
     }
 }
