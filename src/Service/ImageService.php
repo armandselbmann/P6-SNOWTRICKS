@@ -6,6 +6,7 @@ use App\Entity\Image;
 use App\Entity\Trick;
 use App\Repository\ImageRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageService
@@ -13,17 +14,20 @@ class ImageService
     private string $targetDirectory;
     private ImageRepository $imageRepository;
     private EntityManagerInterface $entityManager;
+    private Filesystem $filesystem;
     private Trick $trick;
 
     public function __construct(
         $targetDirectory,
         ImageRepository $imageRepository,
         EntityManagerInterface $entityManager,
+        Filesystem $filesystem,
         Trick $trick)
     {
         $this->targetDirectory = $targetDirectory;
         $this->imageRepository = $imageRepository;
         $this->entityManager = $entityManager;
+        $this->filesystem = $filesystem;
         $this->trick = $trick;
     }
 
@@ -62,14 +66,14 @@ class ImageService
     private function checkFeaturedImage(): void
     {
         // Vérification si image mise en avant déjà présente pour cette figure
-        $checkPresentFeaturedImage = $this->imageRepository->findOneBy(['tricks' => $this->trick->getId(), 'featuredImage' => true]);
+        $checkFeaturedImage = $this->imageRepository->findOneBy(['tricks' => $this->trick->getId(), 'featuredImage' => true]);
 
         // Si oui on supprime cette image
-        if ($checkPresentFeaturedImage) {
+        if ($checkFeaturedImage) {
             // On supprime le fichier
-            unlink($this->targetDirectory.'/'.$checkPresentFeaturedImage->getName());
+            $this->filesystem->remove($this->targetDirectory.'/'.$checkFeaturedImage->getName());
             // On supprime de la base de données
-            $this->entityManager->remove($checkPresentFeaturedImage);
+            $this->entityManager->remove($checkFeaturedImage);
             $this->entityManager->flush();
         }
     }
