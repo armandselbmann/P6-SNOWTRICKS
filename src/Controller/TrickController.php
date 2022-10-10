@@ -13,6 +13,7 @@ use App\Service\ImageService;
 use App\Service\VideoService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -159,13 +160,13 @@ class TrickController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'app_trick_delete', methods: ['GET', 'POST'])]
-    public function delete(Trick $trick, TrickRepository $trickRepository): Response
+    public function delete(Trick $trick, TrickRepository $trickRepository, Filesystem $filesystem): Response
     {
         $images = $trick->getImages();
         foreach($images as $image){
             $fileName = $this->getParameter('images_directory') . '/' . $image->getName();
-            if(file_exists($fileName)){
-                unlink($fileName);
+            if($filesystem->exists($fileName)){
+                $filesystem->remove($fileName);
             }
         }
         $name = $trick->getName();
