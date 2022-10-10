@@ -20,12 +20,13 @@ window.onload = () => {
             })
             .then(
             // On récupère la réponse en JSON
-                (response ) => response.json()
-                ).then((data) => {
+                (response) => response.json()
+                )
+                .then((data) => {
                 if (data.success)
                     this.parentElement.parentElement.remove(),
-                    window.location.reload();
-                    else alert(data.error);
+                window.location.reload();
+                else alert(data.error);
                 })
             .catch((e) => alert(e));
         }
