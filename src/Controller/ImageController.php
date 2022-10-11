@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Image;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,7 +15,7 @@ class ImageController extends AbstractController
 {
 
     #[Route('/delete/{id}', name: 'app_image_delete', methods: 'DELETE')]
-    public function deleteImage(Image $image, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function deleteImage(Image $image, Request $request, EntityManagerInterface $entityManager, Filesystem $filesystem): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -22,7 +23,7 @@ class ImageController extends AbstractController
         if($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])){
 
             // On supprime le fichier / Delete file
-            unlink($this->getParameter('images_directory') . '/' . $image->getName());
+            $filesystem->remove($this->getParameter('images_directory') . '/' . $image->getName());
             // On supprime de la base de données / Delete in Database
             $entityManager->remove($image);
             $entityManager->flush();

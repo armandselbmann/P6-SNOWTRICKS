@@ -28,29 +28,22 @@ class VideoService
      */
     private function checkVideoLink(?string $link): string|bool
     {
-        if(str_contains($link, 'src="https://www.youtube.com')) {
-           return $this->obtainUrlVideoYT($link);
-        }
-        elseif(str_contains($link, 'youtu.be') || stristr($link, 'watch?v=')){
-            return $this->convertUrlVideoYT($link);
-        }
-        elseif(str_contains($link, 'src="https://www.dailymotion.com')) {
-            return $this->obtainUrlVideoDM($link);
-        }
-        elseif(str_contains($link, 'dai.ly') || stristr($link, 'dailymotion.com/video')){
-            return $this->convertUrlVideoDM($link);
-        }
-        elseif(str_contains($link, 'src="https://player.vimeo')) {
-            return $this->obtainUrlVideoVI($link);
-        }
-        elseif(str_contains($link, 'https://player.vimeo')) {
-            return $link;
-        }
-        elseif(str_contains($link, 'vimeo')) {
-            return $this->convertUrlVideoVI($link);
-        }
-        elseif(str_contains($link, 'embed')) {
-            return $link;
+        switch($link) {
+            case str_contains($link, 'src="https://www.youtube.com'):
+                return $this->obtainUrlVideoYT($link);
+            case str_contains($link, 'youtu.be') || stristr($link, 'watch?v='):
+                return $this->convertUrlVideoYT($link);
+            case str_contains($link, 'src="https://www.dailymotion.com'):
+                return $this->obtainUrlVideoDM($link);
+            case str_contains($link, 'dai.ly') || stristr($link, 'dailymotion.com/video'):
+                return $this->convertUrlVideoDM($link);
+            case str_contains($link, 'src="https://player.vimeo'):
+                return $this->obtainUrlVideoVI($link);
+            case str_contains($link, 'vimeo'):
+                return $this->convertUrlVideoVI($link);
+            case str_contains($link, 'embed'):
+            case str_contains($link, 'https://player.vimeo'):
+                return $link;
         }
         return '';
     }
