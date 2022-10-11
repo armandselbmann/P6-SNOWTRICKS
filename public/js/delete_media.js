@@ -17,17 +17,17 @@ window.onload = () => {
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ _token : this.dataset.token })
+          body: JSON.stringify({ _token : this.dataset.token }),
         })
           .then(
             // On récupère la réponse en JSON
             (response) => response.json()
-            )
-          .then(data => {
+          )
+          .then((data) => {
             if (data.success)
               this.parentElement.parentElement.remove(),
                 window.location.reload()
-            else alert(data.error)
+            else alert(data.error);
             })
           .catch((e) => alert(e));
       }
@@ -52,17 +52,17 @@ window.onload = () => {
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ _token : this.dataset.token })
+          body: JSON.stringify({ _token : this.dataset.token }),
         })
           .then(
             // On récupère la réponse en JSON
             (response) => response.json()
-            )
-          .then(data => {
+          )
+          .then((data) => {
             if (data.success)
               this.parentElement.parentElement.remove(),
                 window.location.reload()
-            else alert(data.error)
+            else alert(data.error);
             })
           .catch((f) => alert(f));
       }
