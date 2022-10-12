@@ -38,7 +38,8 @@ class TrickController extends AbstractController
         VideoService $videoService,
         ImageRepository $imageRepository,
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
+        Filesystem $filesystem
     ): Response
     {
         $trick = new Trick();
@@ -46,6 +47,7 @@ class TrickController extends AbstractController
             $this->getParameter('images_directory'),
             $imageRepository,
             $entityManager,
+            $filesystem,
             $trick);
 
         $form = $this->createForm(TrickType::class, $trick);
