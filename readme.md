@@ -58,7 +58,6 @@ php bin/console doctrine:database:create
 ```
 Creating the Database Tables/Schema :
 ```
-php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 ```
 Loading initial data :
@@ -73,6 +72,14 @@ operate the functionnalities related to the use of the mail service.<br>
 Here is the variable to update :
 ```
 MAILER_DSN=null://null
+```
+
+## JSON Web Token Setup
+Add this in the .env
+```
+###> JWT Service ###
+JWT_SECRET='azerty'
+###< JWT Service ###
 ```
 ---
 ## Launch the WebServer
