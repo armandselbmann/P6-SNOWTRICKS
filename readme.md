@@ -29,12 +29,6 @@ Composer </br>
 [Symfony CLI](https://symfony.com/download) </br>
 Yarn </br>
 
-You can run this command to check wether you are missing any extensions or not.
-```
-symfony check:requirements
-```
-Proceed to the next step if your system is ready to run Symfony projects.
-
 ### Download Composer dependencies
 Make sure you have [Composer installed](https://getcomposer.org/download/)
 and then run:
@@ -42,6 +36,12 @@ and then run:
 ```
 composer install
 ```
+
+You can run this command to check wether you are missing any extensions or not.
+```
+symfony check:requirements
+```
+Proceed to the next step if your system is ready to run Symfony projects.
 
 ## Database setup
 ### Configuring Database access
